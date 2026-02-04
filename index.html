@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>数据结构化 - 电商图文数据自动清洗服务</title>
     <meta name="description" content="无需人工标注，自动抽取净含量/规格/功效等字段，准确率可达95%。让10万条商品图文数据自动变成结构化字段表。">
+    <link rel="icon" type="image/jpeg" href="deepsleep.jpeg">
+    <link rel="apple-touch-icon" href="deepsleep.jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,11 +111,23 @@
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
-                    <button class="text-slate-600 hover:text-slate-900 focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 focus:outline-none">
+                        <svg id="menu-icon-open" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
+                        <svg id="menu-icon-close" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                     </button>
+                </div>
+            </div>
+            <!-- Mobile menu dropdown -->
+            <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 pb-4">
+                <div class="flex flex-col space-y-3 pt-4 px-2">
+                    <a href="#pain-points" class="mobile-nav-link text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg hover:bg-slate-50">痛点</a>
+                    <a href="#service" class="mobile-nav-link text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg hover:bg-slate-50">服务流程</a>
+                    <a href="#pricing" class="mobile-nav-link text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg hover:bg-slate-50">价格</a>
+                    <a href="#contact" class="mobile-nav-link text-sm font-medium text-white bg-slate-900 rounded-lg py-2.5 px-3 text-center hover:bg-slate-800 transition-colors">免费测试</a>
                 </div>
             </div>
         </div>
@@ -482,11 +496,13 @@
                     亲眼见证数据结构化的魔力。上传您的样本数据，我们将在 24 小时内返回处理结果。
                 </p>
                 
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg mx-auto max-w-2xl">
-                    <!-- Replace PLACEHOLDER with your actual Tally form ID -->
-                    <iframe data-tally-src="https://tally.so/embed/PLACEHOLDER?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="300" frameborder="0" marginheight="0" marginwidth="0" title="样本提交"></iframe>
-                    <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s)}</script>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="mailto:bangzipi123@163.com?subject=数据结构化样本测试&body=您好，我想提交样本数据进行免费测试。%0A%0A公司名称：%0A数据量（条）：%0A联系方式：" class="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 transform hover:-translate-y-1">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        发送邮件提交样本
+                    </a>
                 </div>
+                <p class="mt-6 text-slate-400 text-sm">邮箱：bangzipi123@163.com</p>
             </div>
         </div>
     </section>
@@ -501,10 +517,10 @@
                 <span class="font-semibold text-slate-700">数据结构化</span>
             </div>
             <div class="text-sm text-slate-500">
-                &copy; 2024 数据结构化服务. All rights reserved.
+                &copy; 2026 数据结构化服务. All rights reserved.
             </div>
             <div class="text-sm text-slate-500">
-                contact@example.com
+                bangzipi123@163.com
             </div>
         </div>
     </footer>
@@ -540,6 +556,24 @@
                 } else {
                     navbar.classList.remove('shadow-sm');
                 }
+            });
+
+            // Mobile menu toggle
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('menu-icon-open');
+            const iconClose = document.getElementById('menu-icon-close');
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                iconOpen.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+            });
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    iconOpen.classList.remove('hidden');
+                    iconClose.classList.add('hidden');
+                });
             });
         });
     </script>

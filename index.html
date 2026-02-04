@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据结构化 - 电商图文数据自动清洗服务</title>
+    <meta name="description" content="无需人工标注，自动抽取净含量/规格/功效等字段，准确率可达95%。让10万条商品图文数据自动变成结构化字段表。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Inter"', '"Noto Sans SC"', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Utilities */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+        }
+        
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #2563eb, #4f46e5);
+        }
+
+        .hero-pattern {
+            background-color: #ffffff;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* Scroll Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Table Styles */
+        .data-table-wrapper {
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body class="font-sans text-slate-600 antialiased bg-white selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg shadow-blue-500/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                        </svg>
+                    </div>
+                    <span class="font-bold text-xl text-slate-900 tracking-tight">数据结构化</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#pain-points" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">痛点</a>
+                    <a href="#service" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">服务流程</a>
+                    <a href="#pricing" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">价格</a>
+                    <a href="#contact" class="px-5 py-2.5 text-sm font-medium text-white bg-slate-900 rounded-full hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        免费测试
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button class="text-slate-600 hover:text-slate-900 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden hero-pattern">
+        <!-- Background Gradients -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full z-0 pointer-events-none">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl mix-blend-multiply animate-float"></div>
+            <div class="absolute top-40 right-10 w-96 h-96 bg-indigo-400/20 rounded-full blur-3xl mix-blend-multiply animate-float" style="animation-delay: 2s;"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto reveal active">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold uppercase tracking-wide mb-6">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                    AI 驱动的数据清洗引擎
+                </div>
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight mb-6 leading-tight">
+                    让 10 万条商品图文数据<br>
+                    <span class="text-gradient">自动变成结构化字段表</span>
+                </h1>
+                <p class="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    无需人工标注，自动抽取净含量、规格、功效等关键字段。<br class="hidden md:block">
+                    准确率可达 95%，为您的电商分析提速 10 倍。
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#contact" class="w-full sm:w-auto px-8 py-4 text-base font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                        👉 提交数据样本测试
+                    </a>
+                    <a href="#service" class="w-full sm:w-auto px-8 py-4 text-base font-semibold text-slate-700 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-all hover:border-slate-300 flex items-center justify-center">
+                        查看演示案例
+                    </a>
+                </div>
+            </div>
+
+            <!-- Visual Transformation Demo -->
+            <div class="mt-20 relative max-w-5xl mx-auto reveal">
+                <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-20 h-full w-full pointer-events-none"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-9 gap-4 items-center">
+                    <!-- Unstructured Input -->
+                    <div class="md:col-span-4 bg-white rounded-xl shadow-xl border border-slate-100 p-6 transform rotate-1 hover:rotate-0 transition-transform duration-500">
+                        <div class="flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
+                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            <span class="text-xs text-slate-400 font-mono ml-auto">raw_data.json</span>
+                        </div>
+                        <div class="space-y-3 font-mono text-xs text-slate-500">
+                            <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                <span class="text-slate-900 font-semibold">"title":</span> "SK-II神仙水230ml精华液护肤品..."
+                            </div>
+                            <div class="p-2 bg-slate-50 rounded border border-slate-100">
+                                <span class="text-slate-900 font-semibold">"desc":</span> "补水保湿，收缩毛孔，适合油皮..."
+                            </div>
+                            <div class="p-2 bg-slate-50 rounded border border-slate-100 opacity-75">
+                                <span class="text-slate-900 font-semibold">"img":</span> "https://img.example.com/..."
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="md:col-span-1 flex justify-center py-4 md:py-0">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 animate-pulse-slow">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transform md:rotate-0 rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Structured Output -->
+                    <div class="md:col-span-4 bg-white rounded-xl shadow-2xl shadow-blue-900/10 border border-blue-100 p-6 transform -rotate-1 hover:rotate-0 transition-transform duration-500 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
+                        <div class="flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
+                            <div class="w-3 h-3 rounded-full bg-slate-200"></div>
+                            <div class="w-3 h-3 rounded-full bg-slate-200"></div>
+                            <div class="w-3 h-3 rounded-full bg-slate-200"></div>
+                            <span class="text-xs text-blue-600 font-mono font-bold ml-auto">structured.csv</span>
+                        </div>
+                        <div class="space-y-0">
+                            <div class="grid grid-cols-2 gap-2 text-xs border-b border-slate-100 pb-2 mb-2 font-semibold text-slate-400">
+                                <div>字段</div>
+                                <div>提取值</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs py-1.5 border-b border-slate-50 items-center">
+                                <div class="text-slate-500">品牌</div>
+                                <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit">SK-II</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs py-1.5 border-b border-slate-50 items-center">
+                                <div class="text-slate-500">净含量</div>
+                                <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit">230ml</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs py-1.5 border-b border-slate-50 items-center">
+                                <div class="text-slate-500">功效</div>
+                                <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit">补水, 收缩毛孔</div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 text-xs py-1.5 items-center">
+                                <div class="text-slate-500">适用肤质</div>
+                                <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit">油性皮肤</div>
+                            </div>
+                        </div>
+                        <!-- Success Badge -->
+                        <div class="absolute bottom-4 right-4">
+                            <div class="flex items-center gap-1 text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-100">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                准确率 98%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pain Points Section -->
+    <section id="pain-points" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">你是否遇到这些问题？</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto">面对海量非结构化数据，传统处理方式往往效率低下且成本高昂。</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group reveal">
+                    <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        📊
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">数据杂乱无法分析</h3>
+                    <p class="text-slate-500 leading-relaxed">
+                        商品标题和图片是非结构化信息，无法直接用于BI报表、竞品对比或趋势分析，数据价值被深埋。
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group reveal" style="transition-delay: 100ms;">
+                    <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        😫
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">人工标注成本高昂</h3>
+                    <p class="text-slate-500 leading-relaxed">
+                        雇佣团队手动提取字段，不仅速度慢、成本高，而且容易出现人为错误，难以应对大促期间的数据洪峰。
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 group reveal" style="transition-delay: 200ms;">
+                    <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        🧹
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">清洗工作耗时耗力</h3>
+                    <p class="text-slate-500 leading-relaxed">
+                        在做任何有价值的类目分析之前，数据团队往往要花费 80% 的时间在清洗数据上，只有 20% 时间用于洞察。
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-16 text-center reveal">
+                <p class="text-lg font-medium text-slate-900 flex items-center justify-center gap-2">
+                    <span class="text-blue-600">👉</span> 我们直接帮你把图文数据变成可用字段表
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Description Section -->
+    <section id="service" class="py-24 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                <!-- Left: Input -->
+                <div class="lg:col-span-4 reveal">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6">极简合作流程</h2>
+                    <div class="space-y-6">
+                        <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
+                            <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 text-xs flex items-center justify-center">1</span>
+                                你只需提供
+                            </h3>
+                            <ul class="space-y-3">
+                                <li class="flex items-start gap-3 text-slate-600">
+                                    <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>商品标题文本 (Excel/CSV)</span>
+                                </li>
+                                <li class="flex items-start gap-3 text-slate-600">
+                                    <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    <span>商品图片链接（可选，提升准确度）</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="flex justify-center lg:justify-start">
+                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium">
+                                ⚡️ 支持 1万–10万条批量处理
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow for Desktop -->
+                <div class="hidden lg:flex lg:col-span-1 justify-center reveal">
+                    <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </div>
+
+                <!-- Right: Output Table -->
+                <div class="lg:col-span-7 reveal">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">2</span>
+                        我们交付结构化表格
+                    </h3>
+                    <div class="data-table-wrapper bg-white">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500 font-semibold">
+                                        <th class="p-4 w-16">ID</th>
+                                        <th class="p-4 w-64">原始标题</th>
+                                        <th class="p-4 text-blue-700 bg-blue-50/50">净含量</th>
+                                        <th class="p-4 text-blue-700 bg-blue-50/50">规格</th>
+                                        <th class="p-4 text-blue-700 bg-blue-50/50">功效</th>
+                                        <th class="p-4 text-right">置信度</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm text-slate-600 divide-y divide-slate-100">
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="p-4 font-mono text-xs text-slate-400">1001</td>
+                                        <td class="p-4 truncate max-w-xs text-slate-900 font-medium">欧莱雅复颜玻尿酸水光充盈导入霜50ml...</td>
+                                        <td class="p-4 bg-blue-50/10">50ml</td>
+                                        <td class="p-4 bg-blue-50/10">正常规格</td>
+                                        <td class="p-4 bg-blue-50/10">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800">保湿</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 ml-1">抗皱</span>
+                                        </td>
+                                        <td class="p-4 text-right">
+                                            <span class="text-green-600 font-bold">99%</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="p-4 font-mono text-xs text-slate-400">1002</td>
+                                        <td class="p-4 truncate max-w-xs text-slate-900 font-medium">三只松鼠 每日坚果 750g/30包 混合果仁...</td>
+                                        <td class="p-4 bg-blue-50/10">750g</td>
+                                        <td class="p-4 bg-blue-50/10">箱装</td>
+                                        <td class="p-4 bg-blue-50/10">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800">补充营养</span>
+                                        </td>
+                                        <td class="p-4 text-right">
+                                            <span class="text-green-600 font-bold">98%</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition-colors">
+                                        <td class="p-4 font-mono text-xs text-slate-400">1003</td>
+                                        <td class="p-4 truncate max-w-xs text-slate-900 font-medium">Nike耐克男鞋Air Force 1空军一号板鞋...</td>
+                                        <td class="p-4 bg-blue-50/10 text-slate-400 italic">N/A</td>
+                                        <td class="p-4 bg-blue-50/10">低帮</td>
+                                        <td class="p-4 bg-blue-50/10">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800">防滑</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 ml-1">耐磨</span>
+                                        </td>
+                                        <td class="p-4 text-right">
+                                            <span class="text-green-600 font-bold">96%</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">简单透明的定价</h2>
+                <p class="text-slate-500">无隐形费用，按数据量级付费</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto items-center">
+                <!-- Plan 1 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 reveal">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">入门版</h3>
+                    <div class="text-3xl font-bold text-slate-900 mb-4">¥1,999</div>
+                    <p class="text-sm text-slate-500 mb-6">适合小型测试或单次项目</p>
+                    <div class="border-t border-slate-100 pt-6 mb-8">
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-2 text-sm text-slate-600">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                数据量 ≤ 1万条
+                            </li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                基础字段提取
+                            </li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                3个工作日交付
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#contact" class="block w-full py-3 px-4 bg-slate-50 text-slate-900 font-medium text-center rounded-lg hover:bg-slate-100 transition-colors border border-slate-200">选择此方案</a>
+                </div>
+
+                <!-- Plan 2 (Featured) -->
+                <div class="bg-white p-8 rounded-2xl shadow-xl border-2 border-blue-500 relative transform scale-105 z-10 reveal" style="transition-delay: 100ms;">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        最受欢迎
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">专业版</h3>
+                    <div class="text-4xl font-bold text-slate-900 mb-4">¥5,999</div>
+                    <p class="text-sm text-slate-500 mb-6">适合大多数中型商家</p>
+                    <div class="border-t border-slate-100 pt-6 mb-8">
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-2 text-sm text-slate-900 font-medium">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                数据量 1–5万条
+                            </li>
+                            <li class="flex items-center gap-2 text-sm text-slate-900 font-medium">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                全字段深度提取
+                            </li>
+                            <li class="flex items-center gap-2 text-sm text-slate-900 font-medium">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                专家人工复核 (98%准确率)
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#contact" class="block w-full py-3 px-4 bg-blue-600 text-white font-medium text-center rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30">立即开始</a>
+                </div>
+
+                <!-- Plan 3 -->
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 reveal" style="transition-delay: 200ms;">
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2">企业版</h3>
+                    <div class="text-3xl font-bold text-slate-900 mb-4">¥9,999</div>
+                    <p class="text-sm text-slate-500 mb-6">大规模数据处理需求</p>
+                    <div class="border-t border-slate-100 pt-6 mb-8">
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-2 text-sm text-slate-600">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                数据量 5–10万条
+                            </li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                定制化字段规则
+                            </li>
+                            <li class="flex items-center gap-2 text-sm text-slate-600">
+                                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                优先处理通道
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#contact" class="block w-full py-3 px-4 bg-slate-50 text-slate-900 font-medium text-center rounded-lg hover:bg-slate-100 transition-colors border border-slate-200">联系我们</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / Form Section -->
+    <section id="contact" class="py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl text-center reveal">
+                <h2 class="text-3xl font-bold text-white mb-4">提交 50 条样本，免费测试效果</h2>
+                <p class="text-slate-300 mb-10 max-w-xl mx-auto">
+                    亲眼见证数据结构化的魔力。上传您的样本数据，我们将在 24 小时内返回处理结果。
+                </p>
+                
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg mx-auto max-w-2xl">
+                    <!-- Replace PLACEHOLDER with your actual Tally form ID -->
+                    <iframe data-tally-src="https://tally.so/embed/PLACEHOLDER?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%" height="300" frameborder="0" marginheight="0" marginwidth="0" title="样本提交"></iframe>
+                    <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w;s.onload=v;s.onerror=v;d.body.appendChild(s)}</script>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-50 border-t border-slate-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-slate-300 rounded flex items-center justify-center text-white text-xs font-bold">
+                    D
+                </div>
+                <span class="font-semibold text-slate-700">数据结构化</span>
+            </div>
+            <div class="text-sm text-slate-500">
+                &copy; 2024 数据结构化服务. All rights reserved.
+            </div>
+            <div class="text-sm text-slate-500">
+                contact@example.com
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Intersection Observer for fade-in animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 20) {
+                    navbar.classList.add('shadow-sm');
+                } else {
+                    navbar.classList.remove('shadow-sm');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

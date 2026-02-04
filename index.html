@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数据结构化 - 电商图文数据自动清洗服务</title>
-    <meta name="description" content="无需人工标注，自动抽取净含量/规格/功效等字段，准确率可达95%。让10万条商品图文数据自动变成结构化字段表。">
+    <title data-i18n="meta_title">数据结构化 - 电商图文数据自动清洗服务</title>
+    <meta name="description" content="无需人工标注，自动抽取净含量/规格/功效等字段，准确率可达95%。让10万条商品图文数据自动变成结构化字段表。" data-i18n-attr="content:meta_desc">
     <link rel="icon" type="image/jpeg" href="deepsleep.jpeg">
     <link rel="apple-touch-icon" href="deepsleep.jpeg">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -83,6 +83,21 @@
             overflow: hidden;
             border: 1px solid #e2e8f0;
         }
+
+        /* Language Toggle */
+        .lang-toggle { display: flex; border-radius: 9999px; overflow: hidden; border: 1px solid #e2e8f0; cursor: pointer; }
+        .lang-toggle button { padding: 4px 12px; font-size: 12px; font-weight: 600; transition: all 0.2s; border: none; cursor: pointer; }
+        .lang-toggle button.active { background: #1e293b; color: white; }
+        .lang-toggle button:not(.active) { background: transparent; color: #64748b; }
+        .lang-toggle button:not(.active):hover { color: #1e293b; }
+
+        /* Smooth text transition */
+        [data-i18n], [data-i18n-html] {
+            transition: opacity 0.2s ease;
+        }
+        .switching-lang [data-i18n], .switching-lang [data-i18n-html] {
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body class="font-sans text-slate-600 antialiased bg-white selection:bg-blue-100 selection:text-blue-900">
@@ -97,20 +112,31 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
                         </svg>
                     </div>
-                    <span class="font-bold text-xl text-slate-900 tracking-tight">数据结构化</span>
+                    <span class="font-bold text-xl text-slate-900 tracking-tight" data-i18n="nav_brand">数据结构化</span>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#pain-points" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">痛点</a>
-                    <a href="#service" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">服务流程</a>
-                    <a href="#pricing" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">价格</a>
-                    <a href="#contact" class="px-5 py-2.5 text-sm font-medium text-white bg-slate-900 rounded-full hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    <a href="#pain-points" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors" data-i18n="nav_pain">痛点</a>
+                    <a href="#service" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors" data-i18n="nav_process">服务流程</a>
+                    <a href="#pricing" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors" data-i18n="nav_price">价格</a>
+                    
+                    <div class="lang-toggle" id="lang-toggle-desktop">
+                        <button data-lang="zh" class="active">中</button>
+                        <button data-lang="en">EN</button>
+                    </div>
+
+                    <a href="#contact" class="px-5 py-2.5 text-sm font-medium text-white bg-slate-900 rounded-full hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5" data-i18n="nav_test">
                         免费测试
                     </a>
                 </div>
 
                 <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
+                <div class="md:hidden flex items-center gap-4">
+                    <div class="lang-toggle" id="lang-toggle-mobile-header">
+                        <button data-lang="zh" class="active">中</button>
+                        <button data-lang="en">EN</button>
+                    </div>
+
                     <button id="mobile-menu-btn" class="text-slate-600 hover:text-slate-900 focus:outline-none">
                         <svg id="menu-icon-open" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -124,10 +150,10 @@
             <!-- Mobile menu dropdown -->
             <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 pb-4">
                 <div class="flex flex-col space-y-3 pt-4 px-2">
-                    <a href="#pain-points" class="mobile-nav-link text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg hover:bg-slate-50">痛点</a>
-                    <a href="#service" class="mobile-nav-link text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg hover:bg-slate-50">服务流程</a>
-                    <a href="#pricing" class="mobile-nav-link text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg hover:bg-slate-50">价格</a>
-                    <a href="#contact" class="mobile-nav-link text-sm font-medium text-white bg-slate-900 rounded-lg py-2.5 px-3 text-center hover:bg-slate-800 transition-colors">免费测试</a>
+                    <a href="#pain-points" class="mobile-nav-link text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg hover:bg-slate-50" data-i18n="nav_pain">痛点</a>
+                    <a href="#service" class="mobile-nav-link text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg hover:bg-slate-50" data-i18n="nav_process">服务流程</a>
+                    <a href="#pricing" class="mobile-nav-link text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors py-2 px-3 rounded-lg hover:bg-slate-50" data-i18n="nav_price">价格</a>
+                    <a href="#contact" class="mobile-nav-link text-sm font-medium text-white bg-slate-900 rounded-lg py-2.5 px-3 text-center hover:bg-slate-800 transition-colors" data-i18n="nav_test">免费测试</a>
                 </div>
             </div>
         </div>
@@ -145,21 +171,21 @@
             <div class="text-center max-w-4xl mx-auto reveal active">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-xs font-semibold uppercase tracking-wide mb-6">
                     <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                    AI 驱动的数据清洗引擎
+                    <span data-i18n="hero_badge">AI 驱动的数据清洗引擎</span>
                 </div>
                 <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-900 tracking-tight mb-6 leading-tight">
-                    让 10 万条商品图文数据<br>
-                    <span class="text-gradient">自动变成结构化字段表</span>
+                    <span data-i18n="hero_title_1">让 10 万条商品图文数据</span><br>
+                    <span class="text-gradient" data-i18n="hero_title_2">自动变成结构化字段表</span>
                 </h1>
-                <p class="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+                <p class="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed" data-i18n-html="hero_desc">
                     无需人工标注，自动抽取净含量、规格、功效等关键字段。<br class="hidden md:block">
                     准确率可达 95%，为您的电商分析提速 10 倍。
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a href="#contact" class="w-full sm:w-auto px-8 py-4 text-base font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <a href="#contact" class="w-full sm:w-auto px-8 py-4 text-base font-semibold text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/40 transform hover:-translate-y-1 flex items-center justify-center gap-2" data-i18n="hero_cta_submit">
                         👉 提交数据样本测试
                     </a>
-                    <a href="#service" class="w-full sm:w-auto px-8 py-4 text-base font-semibold text-slate-700 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-all hover:border-slate-300 flex items-center justify-center">
+                    <a href="#service" class="w-full sm:w-auto px-8 py-4 text-base font-semibold text-slate-700 bg-white border border-slate-200 rounded-full hover:bg-slate-50 transition-all hover:border-slate-300 flex items-center justify-center" data-i18n="hero_cta_demo">
                         查看演示案例
                     </a>
                 </div>
@@ -211,31 +237,31 @@
                         </div>
                         <div class="space-y-0">
                             <div class="grid grid-cols-2 gap-2 text-xs border-b border-slate-100 pb-2 mb-2 font-semibold text-slate-400">
-                                <div>字段</div>
-                                <div>提取值</div>
+                                <div data-i18n="demo_field">字段</div>
+                                <div data-i18n="demo_value">提取值</div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-xs py-1.5 border-b border-slate-50 items-center">
-                                <div class="text-slate-500">品牌</div>
+                                <div class="text-slate-500" data-i18n="demo_brand">品牌</div>
                                 <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit">SK-II</div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-xs py-1.5 border-b border-slate-50 items-center">
-                                <div class="text-slate-500">净含量</div>
+                                <div class="text-slate-500" data-i18n="demo_net">净含量</div>
                                 <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit">230ml</div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-xs py-1.5 border-b border-slate-50 items-center">
-                                <div class="text-slate-500">功效</div>
-                                <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit">补水, 收缩毛孔</div>
+                                <div class="text-slate-500" data-i18n="demo_efficacy">功效</div>
+                                <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit" data-i18n="demo_efficacy_val">补水, 收缩毛孔</div>
                             </div>
                             <div class="grid grid-cols-2 gap-2 text-xs py-1.5 items-center">
-                                <div class="text-slate-500">适用肤质</div>
-                                <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit">油性皮肤</div>
+                                <div class="text-slate-500" data-i18n="demo_skin">适用肤质</div>
+                                <div class="font-medium text-slate-900 bg-blue-50 px-2 py-0.5 rounded w-fit" data-i18n="demo_skin_val">油性皮肤</div>
                             </div>
                         </div>
                         <!-- Success Badge -->
                         <div class="absolute bottom-4 right-4">
                             <div class="flex items-center gap-1 text-[10px] font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full border border-green-100">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                准确率 98%
+                                <span data-i18n="demo_accuracy">准确率 98%</span>
                             </div>
                         </div>
                     </div>
@@ -248,8 +274,8 @@
     <section id="pain-points" class="py-24 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">你是否遇到这些问题？</h2>
-                <p class="text-slate-500 max-w-2xl mx-auto">面对海量非结构化数据，传统处理方式往往效率低下且成本高昂。</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4" data-i18n="pain_title">你是否遇到这些问题？</h2>
+                <p class="text-slate-500 max-w-2xl mx-auto" data-i18n="pain_subtitle">面对海量非结构化数据，传统处理方式往往效率低下且成本高昂。</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
@@ -258,8 +284,8 @@
                     <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
                         📊
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">数据杂乱无法分析</h3>
-                    <p class="text-slate-500 leading-relaxed">
+                    <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="pain_1_title">数据杂乱无法分析</h3>
+                    <p class="text-slate-500 leading-relaxed" data-i18n="pain_1_desc">
                         商品标题和图片是非结构化信息，无法直接用于BI报表、竞品对比或趋势分析，数据价值被深埋。
                     </p>
                 </div>
@@ -269,8 +295,8 @@
                     <div class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
                         😫
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">人工标注成本高昂</h3>
-                    <p class="text-slate-500 leading-relaxed">
+                    <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="pain_2_title">人工标注成本高昂</h3>
+                    <p class="text-slate-500 leading-relaxed" data-i18n="pain_2_desc">
                         雇佣团队手动提取字段，不仅速度慢、成本高，而且容易出现人为错误，难以应对大促期间的数据洪峰。
                     </p>
                 </div>
@@ -280,8 +306,8 @@
                     <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
                         🧹
                     </div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-3">清洗工作耗时耗力</h3>
-                    <p class="text-slate-500 leading-relaxed">
+                    <h3 class="text-xl font-bold text-slate-900 mb-3" data-i18n="pain_3_title">清洗工作耗时耗力</h3>
+                    <p class="text-slate-500 leading-relaxed" data-i18n="pain_3_desc">
                         在做任何有价值的类目分析之前，数据团队往往要花费 80% 的时间在清洗数据上，只有 20% 时间用于洞察。
                     </p>
                 </div>
@@ -289,7 +315,7 @@
 
             <div class="mt-16 text-center reveal">
                 <p class="text-lg font-medium text-slate-900 flex items-center justify-center gap-2">
-                    <span class="text-blue-600">👉</span> 我们直接帮你把图文数据变成可用字段表
+                    <span class="text-blue-600">👉</span> <span data-i18n="pain_cta">我们直接帮你把图文数据变成可用字段表</span>
                 </p>
             </div>
         </div>
@@ -301,27 +327,27 @@
             <div class="grid lg:grid-cols-12 gap-12 items-center">
                 <!-- Left: Input -->
                 <div class="lg:col-span-4 reveal">
-                    <h2 class="text-3xl font-bold text-slate-900 mb-6">极简合作流程</h2>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6" data-i18n="service_title">极简合作流程</h2>
                     <div class="space-y-6">
                         <div class="bg-slate-50 p-6 rounded-xl border border-slate-100">
                             <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                                 <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 text-xs flex items-center justify-center">1</span>
-                                你只需提供
+                                <span data-i18n="service_step1">你只需提供</span>
                             </h3>
                             <ul class="space-y-3">
                                 <li class="flex items-start gap-3 text-slate-600">
                                     <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>商品标题文本 (Excel/CSV)</span>
+                                    <span data-i18n="service_item1">商品标题文本 (Excel/CSV)</span>
                                 </li>
                                 <li class="flex items-start gap-3 text-slate-600">
                                     <svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                    <span>商品图片链接（可选，提升准确度）</span>
+                                    <span data-i18n="service_item2">商品图片链接（可选，提升准确度）</span>
                                 </li>
                             </ul>
                         </div>
                         
                         <div class="flex justify-center lg:justify-start">
-                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium">
+                            <div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium" data-i18n="service_batch">
                                 ⚡️ 支持 1万–10万条批量处理
                             </div>
                         </div>
@@ -337,7 +363,7 @@
                 <div class="lg:col-span-7 reveal">
                     <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                         <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center">2</span>
-                        我们交付结构化表格
+                        <span data-i18n="service_step2">我们交付结构化表格</span>
                     </h3>
                     <div class="data-table-wrapper bg-white">
                         <div class="overflow-x-auto">
@@ -345,11 +371,11 @@
                                 <thead>
                                     <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500 font-semibold">
                                         <th class="p-4 w-16">ID</th>
-                                        <th class="p-4 w-64">原始标题</th>
-                                        <th class="p-4 text-blue-700 bg-blue-50/50">净含量</th>
-                                        <th class="p-4 text-blue-700 bg-blue-50/50">规格</th>
-                                        <th class="p-4 text-blue-700 bg-blue-50/50">功效</th>
-                                        <th class="p-4 text-right">置信度</th>
+                                        <th class="p-4 w-64" data-i18n="table_header_orig">原始标题</th>
+                                        <th class="p-4 text-blue-700 bg-blue-50/50" data-i18n="table_header_net">净含量</th>
+                                        <th class="p-4 text-blue-700 bg-blue-50/50" data-i18n="table_header_spec">规格</th>
+                                        <th class="p-4 text-blue-700 bg-blue-50/50" data-i18n="table_header_eff">功效</th>
+                                        <th class="p-4 text-right" data-i18n="table_header_conf">置信度</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-sm text-slate-600 divide-y divide-slate-100">
@@ -357,10 +383,10 @@
                                         <td class="p-4 font-mono text-xs text-slate-400">1001</td>
                                         <td class="p-4 truncate max-w-xs text-slate-900 font-medium">欧莱雅复颜玻尿酸水光充盈导入霜50ml...</td>
                                         <td class="p-4 bg-blue-50/10">50ml</td>
-                                        <td class="p-4 bg-blue-50/10">正常规格</td>
+                                        <td class="p-4 bg-blue-50/10" data-i18n="table_row1_spec">正常规格</td>
                                         <td class="p-4 bg-blue-50/10">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800">保湿</span>
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 ml-1">抗皱</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800" data-i18n="table_row1_eff1">保湿</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 ml-1" data-i18n="table_row1_eff2">抗皱</span>
                                         </td>
                                         <td class="p-4 text-right">
                                             <span class="text-green-600 font-bold">99%</span>
@@ -370,9 +396,9 @@
                                         <td class="p-4 font-mono text-xs text-slate-400">1002</td>
                                         <td class="p-4 truncate max-w-xs text-slate-900 font-medium">三只松鼠 每日坚果 750g/30包 混合果仁...</td>
                                         <td class="p-4 bg-blue-50/10">750g</td>
-                                        <td class="p-4 bg-blue-50/10">箱装</td>
+                                        <td class="p-4 bg-blue-50/10" data-i18n="table_row2_spec">箱装</td>
                                         <td class="p-4 bg-blue-50/10">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800">补充营养</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800" data-i18n="table_row2_eff">补充营养</span>
                                         </td>
                                         <td class="p-4 text-right">
                                             <span class="text-green-600 font-bold">98%</span>
@@ -382,10 +408,10 @@
                                         <td class="p-4 font-mono text-xs text-slate-400">1003</td>
                                         <td class="p-4 truncate max-w-xs text-slate-900 font-medium">Nike耐克男鞋Air Force 1空军一号板鞋...</td>
                                         <td class="p-4 bg-blue-50/10 text-slate-400 italic">N/A</td>
-                                        <td class="p-4 bg-blue-50/10">低帮</td>
+                                        <td class="p-4 bg-blue-50/10" data-i18n="table_row3_spec">低帮</td>
                                         <td class="p-4 bg-blue-50/10">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800">防滑</span>
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 ml-1">耐磨</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800" data-i18n="table_row3_eff1">防滑</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800 ml-1" data-i18n="table_row3_eff2">耐磨</span>
                                         </td>
                                         <td class="p-4 text-right">
                                             <span class="text-green-600 font-bold">96%</span>
@@ -404,84 +430,84 @@
     <section id="pricing" class="py-24 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">简单透明的定价</h2>
-                <p class="text-slate-500">无隐形费用，按数据量级付费</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4" data-i18n="price_title">简单透明的定价</h2>
+                <p class="text-slate-500" data-i18n="price_subtitle">无隐形费用，按数据量级付费</p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto items-center">
                 <!-- Plan 1 -->
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 reveal">
-                    <h3 class="text-lg font-semibold text-slate-900 mb-2">入门版</h3>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2" data-i18n="price_1_name">入门版</h3>
                     <div class="text-3xl font-bold text-slate-900 mb-4">¥1,999</div>
-                    <p class="text-sm text-slate-500 mb-6">适合小型测试或单次项目</p>
+                    <p class="text-sm text-slate-500 mb-6" data-i18n="price_1_desc">适合小型测试或单次项目</p>
                     <div class="border-t border-slate-100 pt-6 mb-8">
                         <ul class="space-y-3">
                             <li class="flex items-center gap-2 text-sm text-slate-600">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                数据量 ≤ 1万条
+                                <span data-i18n="price_1_feat1">数据量 ≤ 1万条</span>
                             </li>
                             <li class="flex items-center gap-2 text-sm text-slate-600">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                基础字段提取
+                                <span data-i18n="price_1_feat2">基础字段提取</span>
                             </li>
                             <li class="flex items-center gap-2 text-sm text-slate-600">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                3个工作日交付
+                                <span data-i18n="price_1_feat3">3个工作日交付</span>
                             </li>
                         </ul>
                     </div>
-                    <a href="#contact" class="block w-full py-3 px-4 bg-slate-50 text-slate-900 font-medium text-center rounded-lg hover:bg-slate-100 transition-colors border border-slate-200">选择此方案</a>
+                    <a href="#contact" class="block w-full py-3 px-4 bg-slate-50 text-slate-900 font-medium text-center rounded-lg hover:bg-slate-100 transition-colors border border-slate-200" data-i18n="price_1_cta">选择此方案</a>
                 </div>
 
                 <!-- Plan 2 (Featured) -->
                 <div class="bg-white p-8 rounded-2xl shadow-xl border-2 border-blue-500 relative transform scale-105 z-10 reveal" style="transition-delay: 100ms;">
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide" data-i18n="price_2_badge">
                         最受欢迎
                     </div>
-                    <h3 class="text-lg font-semibold text-slate-900 mb-2">专业版</h3>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2" data-i18n="price_2_name">专业版</h3>
                     <div class="text-4xl font-bold text-slate-900 mb-4">¥5,999</div>
-                    <p class="text-sm text-slate-500 mb-6">适合大多数中型商家</p>
+                    <p class="text-sm text-slate-500 mb-6" data-i18n="price_2_desc">适合大多数中型商家</p>
                     <div class="border-t border-slate-100 pt-6 mb-8">
                         <ul class="space-y-3">
                             <li class="flex items-center gap-2 text-sm text-slate-900 font-medium">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                数据量 1–5万条
+                                <span data-i18n="price_2_feat1">数据量 1–5万条</span>
                             </li>
                             <li class="flex items-center gap-2 text-sm text-slate-900 font-medium">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                全字段深度提取
+                                <span data-i18n="price_2_feat2">全字段深度提取</span>
                             </li>
                             <li class="flex items-center gap-2 text-sm text-slate-900 font-medium">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                专家人工复核 (98%准确率)
+                                <span data-i18n="price_2_feat3">专家人工复核 (98%准确率)</span>
                             </li>
                         </ul>
                     </div>
-                    <a href="#contact" class="block w-full py-3 px-4 bg-blue-600 text-white font-medium text-center rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30">立即开始</a>
+                    <a href="#contact" class="block w-full py-3 px-4 bg-blue-600 text-white font-medium text-center rounded-lg hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30" data-i18n="price_2_cta">立即开始</a>
                 </div>
 
                 <!-- Plan 3 -->
                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 reveal" style="transition-delay: 200ms;">
-                    <h3 class="text-lg font-semibold text-slate-900 mb-2">企业版</h3>
+                    <h3 class="text-lg font-semibold text-slate-900 mb-2" data-i18n="price_3_name">企业版</h3>
                     <div class="text-3xl font-bold text-slate-900 mb-4">¥9,999</div>
-                    <p class="text-sm text-slate-500 mb-6">大规模数据处理需求</p>
+                    <p class="text-sm text-slate-500 mb-6" data-i18n="price_3_desc">大规模数据处理需求</p>
                     <div class="border-t border-slate-100 pt-6 mb-8">
                         <ul class="space-y-3">
                             <li class="flex items-center gap-2 text-sm text-slate-600">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                数据量 5–10万条
+                                <span data-i18n="price_3_feat1">数据量 5–10万条</span>
                             </li>
                             <li class="flex items-center gap-2 text-sm text-slate-600">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                定制化字段规则
+                                <span data-i18n="price_3_feat2">定制化字段规则</span>
                             </li>
                             <li class="flex items-center gap-2 text-sm text-slate-600">
                                 <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                                优先处理通道
+                                <span data-i18n="price_3_feat3">优先处理通道</span>
                             </li>
                         </ul>
                     </div>
-                    <a href="#contact" class="block w-full py-3 px-4 bg-slate-50 text-slate-900 font-medium text-center rounded-lg hover:bg-slate-100 transition-colors border border-slate-200">联系我们</a>
+                    <a href="#contact" class="block w-full py-3 px-4 bg-slate-50 text-slate-900 font-medium text-center rounded-lg hover:bg-slate-100 transition-colors border border-slate-200" data-i18n="price_3_cta">联系我们</a>
                 </div>
             </div>
         </div>
@@ -491,18 +517,18 @@
     <section id="contact" class="py-24 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl text-center reveal">
-                <h2 class="text-3xl font-bold text-white mb-4">提交 50 条样本，免费测试效果</h2>
-                <p class="text-slate-300 mb-10 max-w-xl mx-auto">
+                <h2 class="text-3xl font-bold text-white mb-4" data-i18n="cta_title">提交 50 条样本，免费测试效果</h2>
+                <p class="text-slate-300 mb-10 max-w-xl mx-auto" data-i18n="cta_desc">
                     亲眼见证数据结构化的魔力。上传您的样本数据，我们将在 24 小时内返回处理结果。
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <a href="mailto:bangzipi123@163.com?subject=数据结构化样本测试&body=您好，我想提交样本数据进行免费测试。%0A%0A公司名称：%0A数据量（条）：%0A联系方式：" class="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 transform hover:-translate-y-1">
+                    <a id="contact-email-btn" href="mailto:bangzipi123@163.com?subject=数据结构化样本测试&body=您好，我想提交样本数据进行免费测试。%0A%0A公司名称：%0A数据量（条）：%0A联系方式：" class="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/30 transform hover:-translate-y-1">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        发送邮件提交样本
+                        <span data-i18n="cta_button">发送邮件提交样本</span>
                     </a>
                 </div>
-                <p class="mt-6 text-slate-400 text-sm">邮箱：bangzipi123@163.com</p>
+                <p class="mt-6 text-slate-400 text-sm"><span data-i18n="cta_email_label">邮箱：</span>bangzipi123@163.com</p>
             </div>
         </div>
     </section>
@@ -514,9 +540,9 @@
                 <div class="w-6 h-6 bg-slate-300 rounded flex items-center justify-center text-white text-xs font-bold">
                     D
                 </div>
-                <span class="font-semibold text-slate-700">数据结构化</span>
+                <span class="font-semibold text-slate-700" data-i18n="footer_brand">数据结构化</span>
             </div>
-            <div class="text-sm text-slate-500">
+            <div class="text-sm text-slate-500" data-i18n="footer_copy">
                 &copy; 2026 数据结构化服务. All rights reserved.
             </div>
             <div class="text-sm text-slate-500">
@@ -527,8 +553,228 @@
 
     <!-- Scripts -->
     <script>
-        // Intersection Observer for fade-in animations
+        const translations = {
+            zh: {
+                meta_title: "数据结构化 - 电商图文数据自动清洗服务",
+                meta_desc: "无需人工标注，自动抽取净含量/规格/功效等字段，准确率可达95%。让10万条商品图文数据自动变成结构化字段表。",
+                nav_brand: "数据结构化",
+                nav_pain: "痛点",
+                nav_process: "服务流程",
+                nav_price: "价格",
+                nav_test: "免费测试",
+                hero_badge: "AI 驱动的数据清洗引擎",
+                hero_title_1: "让 10 万条商品图文数据",
+                hero_title_2: "自动变成结构化字段表",
+                hero_desc: "无需人工标注，自动抽取净含量、规格、功效等关键字段。<br class='hidden md:block'>准确率可达 95%，为您的电商分析提速 10 倍。",
+                hero_cta_submit: "👉 提交数据样本测试",
+                hero_cta_demo: "查看演示案例",
+                demo_field: "字段",
+                demo_value: "提取值",
+                demo_brand: "品牌",
+                demo_net: "净含量",
+                demo_efficacy: "功效",
+                demo_efficacy_val: "补水, 收缩毛孔",
+                demo_skin: "适用肤质",
+                demo_skin_val: "油性皮肤",
+                demo_accuracy: "准确率 98%",
+                pain_title: "你是否遇到这些问题？",
+                pain_subtitle: "面对海量非结构化数据，传统处理方式往往效率低下且成本高昂。",
+                pain_1_title: "数据杂乱无法分析",
+                pain_1_desc: "商品标题和图片是非结构化信息，无法直接用于BI报表、竞品对比或趋势分析，数据价值被深埋。",
+                pain_2_title: "人工标注成本高昂",
+                pain_2_desc: "雇佣团队手动提取字段，不仅速度慢、成本高，而且容易出现人为错误，难以应对大促期间的数据洪峰。",
+                pain_3_title: "清洗工作耗时耗力",
+                pain_3_desc: "在做任何有价值的类目分析之前，数据团队往往要花费 80% 的时间在清洗数据上，只有 20% 时间用于洞察。",
+                pain_cta: "我们直接帮你把图文数据变成可用字段表",
+                service_title: "极简合作流程",
+                service_step1: "你只需提供",
+                service_item1: "商品标题文本 (Excel/CSV)",
+                service_item2: "商品图片链接（可选，提升准确度）",
+                service_batch: "⚡️ 支持 1万–10万条批量处理",
+                service_step2: "我们交付结构化表格",
+                table_header_orig: "原始标题",
+                table_header_net: "净含量",
+                table_header_spec: "规格",
+                table_header_eff: "功效",
+                table_header_conf: "置信度",
+                table_row1_spec: "正常规格",
+                table_row1_eff1: "保湿",
+                table_row1_eff2: "抗皱",
+                table_row2_spec: "箱装",
+                table_row2_eff: "补充营养",
+                table_row3_spec: "低帮",
+                table_row3_eff1: "防滑",
+                table_row3_eff2: "耐磨",
+                price_title: "简单透明的定价",
+                price_subtitle: "无隐形费用，按数据量级付费",
+                price_1_name: "入门版",
+                price_1_desc: "适合小型测试或单次项目",
+                price_1_feat1: "数据量 ≤ 1万条",
+                price_1_feat2: "基础字段提取",
+                price_1_feat3: "3个工作日交付",
+                price_1_cta: "选择此方案",
+                price_2_badge: "最受欢迎",
+                price_2_name: "专业版",
+                price_2_desc: "适合大多数中型商家",
+                price_2_feat1: "数据量 1–5万条",
+                price_2_feat2: "全字段深度提取",
+                price_2_feat3: "专家人工复核 (98%准确率)",
+                price_2_cta: "立即开始",
+                price_3_name: "企业版",
+                price_3_desc: "大规模数据处理需求",
+                price_3_feat1: "数据量 5–10万条",
+                price_3_feat2: "定制化字段规则",
+                price_3_feat3: "优先处理通道",
+                price_3_cta: "联系我们",
+                cta_title: "提交 50 条样本，免费测试效果",
+                cta_desc: "亲眼见证数据结构化的魔力。上传您的样本数据，我们将在 24 小时内返回处理结果。",
+                cta_button: "发送邮件提交样本",
+                cta_email_label: "邮箱：",
+                footer_brand: "数据结构化",
+                footer_copy: "© 2026 数据结构化服务. All rights reserved."
+            },
+            en: {
+                meta_title: "Data Structuring - AI-Powered E-commerce Data Cleaning",
+                meta_desc: "No manual labeling. Automatically extract key fields like net weight, specs, and efficacy. Turn 100K product listings into structured data tables.",
+                nav_brand: "Data Structuring",
+                nav_pain: "Pain Points",
+                nav_process: "How It Works",
+                nav_price: "Pricing",
+                nav_test: "Free Trial",
+                hero_badge: "AI-Powered Data Cleaning Engine",
+                hero_title_1: "Turn 100K Product Listings",
+                hero_title_2: "Into Structured Data Tables",
+                hero_desc: "No manual labeling. Automatically extract key fields like net weight, specs, and efficacy.<br class='hidden md:block'>Up to 95% accuracy. 10x faster e-commerce analytics.",
+                hero_cta_submit: "👉 Submit Sample Data",
+                hero_cta_demo: "View Demo",
+                demo_field: "Field",
+                demo_value: "Extracted Value",
+                demo_brand: "Brand",
+                demo_net: "Net Content",
+                demo_efficacy: "Efficacy",
+                demo_efficacy_val: "Hydrating, Pore Tightening",
+                demo_skin: "Skin Type",
+                demo_skin_val: "Oily Skin",
+                demo_accuracy: "98% Accuracy",
+                pain_title: "Facing These Challenges?",
+                pain_subtitle: "Traditional methods of handling massive unstructured data are slow and expensive.",
+                pain_1_title: "Messy Data, No Analysis",
+                pain_1_desc: "Product titles and images are unstructured — unusable for BI dashboards, competitor analysis, or trend reports. Your data's value stays buried.",
+                pain_2_title: "Manual Labeling Is Expensive",
+                pain_2_desc: "Hiring teams to manually extract fields is slow, costly, and error-prone — especially during peak sales events.",
+                pain_3_title: "Data Cleaning Takes Forever",
+                pain_3_desc: "Data teams spend 80% of their time cleaning data and only 20% on actual insights, before any meaningful analysis can begin.",
+                pain_cta: "We turn your raw product data into ready-to-use structured tables",
+                service_title: "Simple Workflow",
+                service_step1: "You Provide",
+                service_item1: "Product titles (Excel/CSV)",
+                service_item2: "Product image URLs (optional, improves accuracy)",
+                service_batch: "⚡️ Batch processing: 10K–100K items",
+                service_step2: "We Deliver Structured Tables",
+                table_header_orig: "Original Title",
+                table_header_net: "Net Content",
+                table_header_spec: "Specs",
+                table_header_eff: "Efficacy",
+                table_header_conf: "Confidence",
+                table_row1_spec: "Standard",
+                table_row1_eff1: "Moisturizing",
+                table_row1_eff2: "Anti-wrinkle",
+                table_row2_spec: "Boxed",
+                table_row2_eff: "Nutritional",
+                table_row3_spec: "Low-top",
+                table_row3_eff1: "Non-slip",
+                table_row3_eff2: "Durable",
+                price_title: "Simple, Transparent Pricing",
+                price_subtitle: "No hidden fees. Pay by data volume.",
+                price_1_name: "Starter",
+                price_1_desc: "Great for small tests or one-time projects",
+                price_1_feat1: "Up to 10K items",
+                price_1_feat2: "Basic field extraction",
+                price_1_feat3: "3 business days delivery",
+                price_1_cta: "Choose Plan",
+                price_2_badge: "Most Popular",
+                price_2_name: "Professional",
+                price_2_desc: "For most mid-size merchants",
+                price_2_feat1: "10K–50K items",
+                price_2_feat2: "Full deep field extraction",
+                price_2_feat3: "Expert review (98% accuracy)",
+                price_2_cta: "Get Started",
+                price_3_name: "Enterprise",
+                price_3_desc: "For large-scale data needs",
+                price_3_feat1: "50K–100K items",
+                price_3_feat2: "Custom field rules",
+                price_3_feat3: "Priority processing",
+                price_3_cta: "Contact Us",
+                cta_title: "Submit 50 Samples, Free Trial",
+                cta_desc: "See the magic of data structuring. Upload your sample data, and we'll return results within 24 hours.",
+                cta_button: "Email Your Samples",
+                cta_email_label: "Email: ",
+                footer_brand: "Data Structuring",
+                footer_copy: "© 2026 Data Structuring Service. All rights reserved."
+            }
+        };
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+            
+            localStorage.setItem('lang', lang);
+
+            document.body.classList.add('switching-lang');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-html]').forEach(el => {
+                const key = el.getAttribute('data-i18n-html');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+                const [attr, key] = el.getAttribute('data-i18n-attr').split(':');
+                if (translations[lang][key]) {
+                    el.setAttribute(attr, translations[lang][key]);
+                }
+            });
+
+            const mailtoBtn = document.getElementById('contact-email-btn');
+            if (mailtoBtn) {
+                if (lang === 'zh') {
+                    mailtoBtn.href = "mailto:bangzipi123@163.com?subject=数据结构化样本测试&body=您好，我想提交样本数据进行免费测试。%0A%0A公司名称：%0A数据量（条）：%0A联系方式：";
+                } else {
+                    mailtoBtn.href = "mailto:bangzipi123@163.com?subject=Data Structuring Sample Test&body=Hello, I'd like to submit sample data for a free test.%0A%0ACompany:%0AData volume:%0AContact:";
+                }
+            }
+
+            document.querySelectorAll('.lang-toggle button').forEach(btn => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            setTimeout(() => {
+                document.body.classList.remove('switching-lang');
+            }, 200);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('lang') || 'zh';
+            setLanguage(savedLang);
+
+            document.querySelectorAll('.lang-toggle button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const lang = e.target.dataset.lang;
+                    setLanguage(lang);
+                });
+            });
+
             const observerOptions = {
                 root: null,
                 rootMargin: '0px',
@@ -548,7 +794,6 @@
                 observer.observe(el);
             });
 
-            // Navbar scroll effect
             const navbar = document.getElementById('navbar');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 20) {
@@ -558,7 +803,6 @@
                 }
             });
 
-            // Mobile menu toggle
             const menuBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             const iconOpen = document.getElementById('menu-icon-open');
